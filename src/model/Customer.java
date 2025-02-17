@@ -3,9 +3,9 @@ package model;
 import java.util.regex.Pattern;
 
 public class Customer {
-    String firstName;
-    String lastName;
-    String email;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
 
     public Customer(String firstName, String lastName, String email) {
             String emailRegex = "^(.+)@(.+).(com|net|org)$";
