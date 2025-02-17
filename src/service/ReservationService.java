@@ -8,13 +8,13 @@ import model.Reservation;
 import java.util.*;
 
 public class ReservationService {
-    private static final Map<String, IRoom> roomsMap = new HashMap<>();
+    public static final Map<String, IRoom> roomsMap = new HashMap<>();
     private final static Map<Date, Set<IRoom>> reservedRoomsDateMap = new HashMap<>();
     private final static Map<String, Set<Reservation>> reservedRoomsCustomerMap = new HashMap<>();
-    private static void addRoom(IRoom room) {
+    public static void addRoom(IRoom room) {
         roomsMap.put(room.getRoomNumber(), room);
     }
-    private static IRoom getARoom(String roomId) {
+    public static IRoom getARoom(String roomId) {
         return roomsMap.get(roomId);
     }
     public static Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
@@ -37,7 +37,7 @@ public class ReservationService {
             return null;
         }
     }
-    private static Set<IRoom> findRooms(Date checkInDate, Date checkOutDate){
+    public static Set<IRoom> findRooms(Date checkInDate, Date checkOutDate){
         //get all rooms
         Set<String> allRoomsNumber = roomsMap.keySet();
         Set<IRoom> allRooms = new HashSet<>();
@@ -62,7 +62,7 @@ public class ReservationService {
     public static Set<Reservation> getCustomerReservation(Customer customer){
         return reservedRoomsCustomerMap.get(customer.getEmail());
     }
-    public void printAllReservation(){
+    public static void printAllReservation(){
         System.out.println(reservedRoomsCustomerMap.values());
     }
 }
