@@ -4,9 +4,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class HotelReservationUtils {
-    public static String getUserEmailAddress() {
+    public static String getUserEmailAddress(Scanner scanner) {
         System.out.println("Please enter your email address.");
-        Scanner scanner = new Scanner(System.in);
         String emailAddress = scanner.nextLine();
         boolean validEmailAddressReceived = false;
         while (!validEmailAddressReceived) {
