@@ -8,7 +8,7 @@ public class Customer {
     private final String email;
 
     public Customer(String firstName, String lastName, String email) {
-            String emailRegex = "^(.+)@(.+).(com|net|org)$";
+            String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|net|org)$";
             Pattern pattern = Pattern.compile(emailRegex);
             if (!pattern.matcher(email).matches()) {
                 throw new IllegalArgumentException("Error: Invalid Email");
@@ -16,6 +16,10 @@ public class Customer {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getEmail() {
