@@ -7,6 +7,7 @@ import service.ReservationService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class AdminResource {
     public static Customer getCustomer(String email) {
@@ -22,6 +23,8 @@ public class AdminResource {
     public static Collection<IRoom> getAllRooms() {
         return ReservationService.roomsMap.values();
     }
+
+    public static Set<String> getAllRoomNumbers() { return ReservationService.roomsMap.keySet(); }
 
     public static Collection<Customer> getAllCustomers() {
         return CustomerService.customersMap.values();

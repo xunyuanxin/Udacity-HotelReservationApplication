@@ -21,6 +21,7 @@ public class MainMenu {
                 System.out.println("4. Admin.");
                 System.out.println("5. Exit.");
                 int selection = Integer.parseInt(scanner.nextLine());
+                boolean returnToMain = false;
 
                 if (selection == 1 || selection == 2 || selection == 3) {
                     String emailAddress = HotelReservationUtils.getUserEmailAddress(scanner);
@@ -35,26 +36,56 @@ public class MainMenu {
                                     IRoom room = HotelResource.getRoom(roomNumber);
                                     if (room != null) {
                                         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                                        try {
-                                            System.out.println("What is the check-in date? Format - 'MM/DD/YYYY'");
+                                        System.out.println("What is the check-in date? Format - 'MM/DD/YYYY'");
+                                        System.out.println("Type 'quit' to cancel reserve room - " + roomNumber + ".");
+                                        Date checkInDate = null;
+                                        boolean checkInRunning = true;
+                                        while (checkInRunning) {
                                             String checkInDay = scanner.nextLine();
-                                            Date checkInDate = formatter.parse(checkInDay);
-                                            System.out.println("What is the check-out date? Format - 'MM/DD/YYYY'");
-                                            String checkOutDay = scanner.nextLine();
-                                            Date checkOutDate = formatter.parse(checkOutDay);
-                                            Reservation reservation = HotelResource.bookARoom(emailAddress, room, checkInDate, checkOutDate);
-                                            System.out.println("Successfully Reserved Room - " + roomNumber);
-                                            System.out.println("Reservation Confirmation: " + reservation);
-                                        } catch (ParseException ex) {
-                                            ex.printStackTrace();
+                                            if (isStringDateFormat(checkInDay)) {
+                                                checkInDate = formatter.parse(checkInDay);
+                                                checkInRunning = false;
+                                            } else if (checkInDay.equals("quit")) {
+                                                returnToMain = true;
+                                                break;
+                                            } else {
+                                                System.out.println("Please enter a valid check-in date (Format - 'MM/DD/YYYY'). Type 'quit' to cancel reserve room - " + roomNumber + ".");
+                                            }
                                         }
+                                        if (returnToMain) {
+                                            continue;
+                                        }
+                                        System.out.println("What is the check-out date? Format - 'MM/DD/YYYY'");
+                                        System.out.println("Type 'quit' to cancel reserve room - " + roomNumber + ".");
+                                        Date checkOutDate = null;
+                                        boolean checkOutRunning = true;
+                                        while (checkOutRunning) {
+                                            String checkOutDay = scanner.nextLine();
+                                            if (isStringDateFormat(checkOutDay)) {
+                                                checkOutDate = formatter.parse(checkOutDay);
+                                                checkOutRunning = false;
+                                            } else if (checkOutDay.equals("quit")) {
+                                                returnToMain = true;
+                                                break;
+                                            } else {
+                                                System.out.println("Please enter a valid check-out date (Format - 'MM/DD/YYYY'). Type 'quit' to cancel reserve room - " + roomNumber + ".");
+                                            }
+                                        }
+                                        if (returnToMain) {
+                                            continue;
+                                        }
+                                        Reservation reservation = HotelResource.bookARoom(emailAddress, room, checkInDate, checkOutDate);
+                                        System.out.println("Successfully Reserved Room - " + roomNumber);
+                                        System.out.println("Reservation Confirmation: " + reservation);
                                     } else {
                                         System.out.println("Sorry, we don't find this room number. " +
                                                 "Please 'Add a room' first in 'Admin'.");
                                     }
                                 } else {
                                     System.out.println("Below are all of your reservations.");
-                                    System.out.println(HotelResource.getCustomerReservations(emailAddress));
+                                    System.out.println(HotelResource.getCustomerReservations(emailAddress) == null
+                                            ? "Sorry, we don't find any reservations under your account. Please 'reserve a room' first."
+                                            : HotelResource.getCustomerReservations(emailAddress));
                                 }
                             } else {
                                 System.out.println("We already have an account related to this email address.");
@@ -84,6 +115,16 @@ public class MainMenu {
             } catch (Exception ex) {
                 System.out.println("Please enter a number between 1 and 5.\n");
             }
+        }
+    }
+
+    public static boolean isStringDateFormat(String str) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            formatter.parse(str);
+            return true;
+        } catch (ParseException e) {
+            return false;
         }
     }
 }
